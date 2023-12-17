@@ -4,3 +4,4 @@ numpy
 matplotlib
 pandas
 pomegranate
+scikit_learn
