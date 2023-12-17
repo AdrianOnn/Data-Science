@@ -1,4 +1,7 @@
-pip install git+https://github.com/pgmpy/pgmpy.git@dev
+$ git clone https://github.com/pgmpy/pgmpy
+$ cd pgmpy/
+$ pip install -r requirements.txt
+$ python setup.py install
 
 import numpy as np
 import pandas as pd
