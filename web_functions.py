@@ -1,3 +1,4 @@
+!pip install pgmpy
 import numpy as np
 import pandas as pd
 from pgmpy.estimators import BayesianEstimator
