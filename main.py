@@ -1,4 +1,6 @@
 # Importing the necessary Python modules.
+pip install pomegranate
+
 import streamlit as st
 import pandas as pd
 import numpy as np
