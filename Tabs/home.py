@@ -1,5 +1,3 @@
-"""This modules contains data about home page"""
-
 # Import necessary modules
 import streamlit as st
 
