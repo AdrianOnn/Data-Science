@@ -3,5 +3,5 @@ streamlit
 numpy
 matplotlib
 pandas
-pomegranate
 scikit_learn
+pymc3
