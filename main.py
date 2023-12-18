@@ -2,7 +2,8 @@
 import streamlit as st
 import pandas as pd
 import numpy as np
-from pomegranate.bayesian_network import BayesianNetwork, DiscreteDistribution, State
+from pomegranate.bayesian_network import BayesianNetwork
+from pomegranate.distributions import DiscreteDistribution, State
 
 # Import necessary functions from web_functions
 from web_functions import load_data
