@@ -4,9 +4,6 @@ import pandas as pd
 import numpy as np
 from pomegranate.bayesian_network import BayesianNetwork
 
-# Import necessary functions from web_functions
-from web_functions import load_data
-
 # Import pages
 from Tabs import home, data, predict, visualise
 
