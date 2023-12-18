@@ -1,49 +1,38 @@
-# Importing the necessary Python modules.
-import streamlit as st
-import pandas as pd
+# Import necessary modules
 import numpy as np
+import pandas as pd
 from pomegranate.bayesian_network import BayesianNetwork
+import streamlit as st
 
-# Import pages
-from Tabs import home, data, predict, visualise
+@st.cache()
+def load_data():
+    """This function returns the preprocessed data"""
 
-# Configure the app
-st.set_page_config(
-    page_title='Stress Level Detector',
-    page_icon='heavy_exclamation_mark',
-    layout='wide',
-    initial_sidebar_state='auto'
-)
+    # Load the Diabetes dataset into DataFrame.
+    df = pd.read_csv('Stress.csv')
 
-# Dictionary for pages
-Tabs = {
-    "Home": home,
-    "Data Info": data,
-    "Prediction": predict,
-    "Visualisation": visualise
-}
+    # Rename the column names in the DataFrame.
+    df.rename(columns = {"t": "bt",}, inplace = True)
+    
+    # Perform feature and target split
+    X = df[["sr","rr","bt","lm","bo","rem","sh","hr"]]
+    y = df['sl']
 
-# Create a sidebar
-st.sidebar.title("Navigation")
+    return df, X, y
 
-# Create radio option to select the page
-page = st.sidebar.radio("Pages", list(Tabs.keys()))
-
-# Loading the dataset.
-df, X, y = load_data()
-
-# Train model function using Pomegranate
+@st.cache()
 def train_model(X, y):
-    model = BayesianNetwork.from_samples(X, state_names=X.columns)
-    model.fit(X.values, y.values)
+    """This function trains the model and return the model and model score"""
+    # Create the model
+    model = BayesianNetwork.from_samples(X, algorithm='chow-liu')
+
+    # Return the model
     return model
 
-# Call the app function of the selected page to run
-if page == "Prediction":
-    Tabs[page].app(df, X, y, train_model)
-elif page == "Visualisation":
-    Tabs[page].app(df)
-elif page == "Data Info":
-    Tabs[page].app(df)
-else:
-    Tabs[page].app()
+def predict(X, y, features):
+    # Get model
+    model = train_model(X, y)
+    # Predict the value
+    prediction = model.predict(np.array(features).reshape(1, -1))
+
+    return prediction
