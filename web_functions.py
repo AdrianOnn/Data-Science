@@ -1,7 +1,7 @@
 # Import necessary modules
 import numpy as np
 import pandas as pd
-from pomegranate.bayesian_network import BayesianNetwork
+import pymc3 as pm
 import streamlit as st
 
 @st.cache()
@@ -24,15 +24,30 @@ def load_data():
 def train_model(X, y):
     """This function trains the model and return the model and model score"""
     # Create the model
-    model = BayesianNetwork.from_samples(X, algorithm='chow-liu')
+    with pm.Model() as model:
+        # Priors for unknown model parameters
+        alpha = pm.Normal('alpha', mu=0, sd=10)
+        beta = pm.Normal('beta', mu=0, sd=10, shape=np.shape(X)[1])
+        sigma = pm.HalfNormal('sigma', sd=1)
 
-    # Return the model
-    return model
+        # Expected value of outcome
+        mu = alpha + pm.math.dot(beta, X.T)
+
+        # Likelihood (sampling distribution) of observations
+        y_obs = pm.Normal('y_obs', mu=mu, sd=sigma, observed=y)
+
+        # Inference
+        trace = pm.sample(2000, tune=1000)
+
+    # Return the values
+    return model, trace
 
 def predict(X, y, features):
-    # Get model
-    model = train_model(X, y)
+    # Get model and model trace
+    model, trace = train_model(X, y)
     # Predict the value
-    prediction = model.predict(np.array(features).reshape(1, -1))
+    ppc = pm.sample_posterior_predictive(trace, model=model)
+    prediction = ppc['y_obs'].mean(axis=0)
 
     return prediction
+
