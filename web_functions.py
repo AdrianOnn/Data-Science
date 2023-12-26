@@ -17,20 +17,13 @@ def load_data():
     return df, X, y
 
 @st.cache()
-def train_model(X, y):
-    """Trains a Bayesian Network model."""
-
-    # Define the network structure (adjust based on domain knowledge)
-    model = BayesianModel([("sr", "sl"), ("rr", "sl"), ("bt", "sl"), ("lm", "sl"),
-                            ("bo", "sl"), ("rem", "sl"), ("sh", "sl"), ("hr", "sl")])
-
-    # Learn model parameters from data
-    model.fit(X, estimator=BayesianEstimator, prior_type="BDeu")
-
+def train_model(df):
+    model = BayesianModel([('sr', 'sl'), ('rr', 'sl'), ('bt', 'sl'), ('lm', 'sl'),
+                           ('bo', 'sl'), ('rem', 'sl'), ('sh', 'sl'), ('hr', 'sl')])
+    model.fit(data=df, estimator=BayesianEstimator, prior_type="BDeu")
     return model
 
 def predict(model, features):
-    """Predicts using the trained Bayesian Network model."""
-
-    prediction = model.predict(features)
-    return prediction
+    prediction = model.predict_probability(features)
+    predicted_stress_level = np.argmax(prediction)
+    return predicted_stress_level, prediction
