@@ -6,6 +6,11 @@ import streamlit as st
 
 @st.cache()
 def load_data():
+    # Print available columns to check for typos
+    with open('Stress.csv', 'r') as f:
+        cols = pd.read_csv(f, nrows=1).columns
+        print("Available columns:", cols)
+
     # Load only necessary columns and convert data types
     df = pd.read_csv('Stress.csv', usecols=['sr', 'rr', 'bt', 'lm', 'bo', 'rem', 'sh', 'hr', 'sl'])
     for col in df.columns:
