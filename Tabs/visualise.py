@@ -12,7 +12,7 @@ import streamlit as st
 # Import necessary functions from web_functions
 from web_functions import train_model
 
-def app(df, X, y):
+def app(df, model):
     """This function create the visualisation page"""
     
     # Remove the warnings
@@ -52,6 +52,11 @@ def app(df, X, y):
     if st.checkbox("Display Boxplot"):
         fig, ax = plt.subplots(figsize=(15,5))
         df.boxplot(['sr', 'rr', 'bt','rem','bo','sh'],ax=ax)
+        st.pyplot()
+
+    if st.checkbox("Display Conditional Distributions"):
+        fig, ax = plt.subplots(figsize=(15,5))
+        sns.violinplot(x="sl", y="sr", hue="sl", data=df, split=True, ax=ax)
         st.pyplot()
 
     if st.checkbox("Show Sample Results"):
