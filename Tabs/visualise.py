@@ -31,6 +31,7 @@ def app(df, model):
         bottom, top = ax.get_ylim()                             # Getting the top and bottom margin limits.
         ax.set_ylim(bottom + 0.5, top - 0.5)                    # Increasing the bottom and decreasing the top margins respectively.
         st.pyplot(fig)
+        plt.close()
 
     if st.checkbox("Show Scatter Plot"):
         
@@ -48,16 +49,19 @@ def app(df, model):
         sns.scatterplot(ax=axis[1,1],data=df,x='sh',y='hr')
         axis[1, 1].set_title("Sleeping Hour vs Heart Rate")
         st.pyplot()
+        plt.close()
 
     if st.checkbox("Display Boxplot"):
         fig, ax = plt.subplots(figsize=(15,5))
         df.boxplot(['sr', 'rr', 'bt','rem','bo','sh'],ax=ax)
         st.pyplot()
+        plt.close()
 
     if st.checkbox("Display Conditional Distributions"):
         fig, ax = plt.subplots(figsize=(15,5))
         sns.violinplot(x="sl", y="sr", hue="sl", data=df, split=True, ax=ax)
         st.pyplot()
+        plt.close()
 
     if st.checkbox("Show Sample Results"):
         safe = (df['sl'] == 0).sum()
@@ -70,3 +74,4 @@ def app(df, model):
         colors = sns.color_palette('pastel')[0:7]
         plt.pie(data, labels = labels, colors = colors, autopct='%.0f%%')
         st.pyplot()
+        plt.close()
