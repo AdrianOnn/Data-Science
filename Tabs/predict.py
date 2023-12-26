@@ -5,7 +5,7 @@ import streamlit as st
 from web_functions import predict
 
 
-def app(df, model):
+def app(df, X, y):
     """This function create the prediction page"""
 
     # Add title to the page
@@ -39,8 +39,8 @@ def app(df, model):
 
     # Create a button to predict
     if st.button("Predict"):
-        # Get prediction
-        prediction, probabilities = predict(model, features)
+        # Get prediction and model score
+        prediction, score = predict(X, y, features)
         st.info("Stress level detected...")
 
         # Print the output according to the prediction
@@ -55,6 +55,5 @@ def app(df, model):
         else:
             st.success("The person is stress free and calm 😄")
 
-        # Display probabilities
-        st.write("Stress level probabilities: ", (probabilities*100),"%")
-        plt.close()
+        # Print the score of the model 
+        st.write("The model used is trusted by doctor and has an accuracy of ", (score*100),"%")
