@@ -5,7 +5,7 @@ import numpy as np
 import pandas as pd
 import streamlit as st
 from pgmpy.models import BayesianModel
-from pgmpy.estimators import MaximumLikelihoodEstimator
+from pgmpy.estimators import BayesianEstimator  # Corrected import
 
 @st.cache()
 def load_data():
@@ -15,12 +15,10 @@ def load_data():
     df = pd.read_csv('Stress.csv')
 
     # Rename the column names in the DataFrame.
-    df.rename(columns = {"t": "bt",}, inplace = True)
-    
-    
+    df.rename(columns={"t": "bt"}, inplace=True)
 
     # Perform feature and target split
-    X = df[["sr","rr","bt","lm","bo","rem","sh","hr"]]
+    X = df[["sr", "rr", "bt", "lm", "bo", "rem", "sh", "hr"]]
     y = df['sl']
 
     return df, X, y
@@ -30,14 +28,14 @@ def train_model(X, y):
     """This function trains the model and returns the model and model score"""
     # Create the model
     model = BayesianModel()
-    
-    # Estimate the parameters using Maximum Likelihood Estimation
-    estimator = MaximumLikelihoodEstimator(model, X)
-    model.fit(X, estimator=estimator)
-    
+
+    # Estimate the parameters using BayesianEstimator
+    estimator = BayesianEstimator(model, X)  # Corrected estimator
+    model.fit(data=X, estimator=estimator)  # Pass data as a keyword argument
+
     # Get the model score
     score = model.score(X)
-    
+
     # Return the values
     return model, score
 
