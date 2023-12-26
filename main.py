@@ -26,7 +26,7 @@ page = st.sidebar.radio("Pages", list(Tabs.keys()))
 
 # Load the dataset and train the model
 df, X, y = load_data()
-model = train_model(X, y)  # Train the Bayesian Network model
+model = train_model(df)  # Train the Bayesian Network model
 
 # Call the app function of the selected page
 if page in ["Prediction", "Visualisation"]:
