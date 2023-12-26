@@ -57,3 +57,4 @@ def app(df, model):
 
         # Display probabilities
         st.write("Stress level probabilities: ", (probabilities*100),"%")
+        plt.close()
