@@ -39,8 +39,8 @@ def app(df, X, y):
 
     # Create a button to predict
     if st.button("Predict"):
-        # Get prediction and model score
-        prediction, score = predict(X, y, features)
+        # Get prediction
+        prediction = predict(model, features)
         st.info("Stress level detected...")
 
         # Print the output according to the prediction
