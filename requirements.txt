@@ -4,4 +4,4 @@ numpy
 matplotlib
 pandas
 scikit_learn
-pymc3
+pgmpy
