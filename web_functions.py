@@ -1,23 +1,16 @@
-"""This module contains necessary function needed"""
-
-# Import necessary modules
 import numpy as np
 import pandas as pd
-import streamlit as st
 from pgmpy.models import BayesianModel
-from pgmpy.estimators import BayesianEstimator  # Corrected import
+from pgmpy.estimators import BayesianEstimator
+import streamlit as st
 
 @st.cache()
 def load_data():
-    """This function returns the preprocessed data"""
+    """Loads and preprocesses the data."""
 
-    # Load the Diabetes dataset into DataFrame.
     df = pd.read_csv('Stress.csv')
-
-    # Rename the column names in the DataFrame.
     df.rename(columns={"t": "bt"}, inplace=True)
 
-    # Perform feature and target split
     X = df[["sr", "rr", "bt", "lm", "bo", "rem", "sh", "hr"]]
     y = df['sl']
 
@@ -25,23 +18,19 @@ def load_data():
 
 @st.cache()
 def train_model(X, y):
-    """This function trains the model and returns the model and model score"""
-    # Create the model
-    model = BayesianModel()
+    """Trains a Bayesian Network model."""
 
-    # Estimate the parameters using BayesianEstimator
-    estimator = BayesianEstimator(model, X)  # Corrected estimator
-    model.fit(data=X, estimator=estimator)  # Pass data as a keyword argument
+    # Define the network structure (adjust based on domain knowledge)
+    model = BayesianModel([("sr", "sl"), ("rr", "sl"), ("bt", "sl"), ("lm", "sl"),
+                            ("bo", "sl"), ("rem", "sl"), ("sh", "sl"), ("hr", "sl")])
 
-    # Get the model score
-    score = model.score(X)
+    # Learn model parameters from data
+    model.fit(X, estimator=BayesianEstimator, prior_type="BDeu")
 
-    # Return the values
-    return model, score
+    return model
 
-@st.cache()
-def predict(X, y, features):
-    model, score = train_model(X, y)
-    prediction = model.predict(np.array(features).reshape(1, -1))
+def predict(model, features):
+    """Predicts using the trained Bayesian Network model."""
 
-    return prediction, score
+    prediction = model.predict(features)
+    return prediction
