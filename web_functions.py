@@ -6,12 +6,15 @@ import streamlit as st
 
 @st.cache()
 def load_data():
-    """Loads and preprocesses the data."""
+    # Load only necessary columns and convert data types
+    df = pd.read_csv('Stress.csv', usecols=['sr', 'rr', 'bt', 'lm', 'bo', 'rem', 'sh', 'hr', 'sl'])
+    for col in df.columns:
+        if df[col].dtype == 'object':
+            df[col] = pd.to_numeric(df[col], errors='coerce')
+    df['sl'] = df['sl'].astype('category')
 
-    df = pd.read_csv('Stress.csv')
-    df.rename(columns={"t": "bt"}, inplace=True)
-
-    X = df[["sr", "rr", "bt", "lm", "bo", "rem", "sh", "hr"]]
+    # Feature and target split
+    X = df.drop('sl', axis=1)  # Avoid creating a copy using iloc
     y = df['sl']
 
     return df, X, y
